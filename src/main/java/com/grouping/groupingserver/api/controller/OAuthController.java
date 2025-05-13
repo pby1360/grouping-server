@@ -1,13 +1,6 @@
 package com.grouping.groupingserver.api.controller;
 
 import com.grouping.groupingserver.application.member.facade.OAuthFacade;
-import com.grouping.groupingserver.infrastructure.oauth.google.GoogleTokenResponse;
-import com.grouping.groupingserver.infrastructure.oauth.google.GoogleUser;
-import com.grouping.groupingserver.api.dto.response.MemberResponse;
-import com.grouping.groupingserver.application.member.command.OauthLoginCommand;
-import com.grouping.groupingserver.application.member.facade.MemberFacade;
-import com.grouping.groupingserver.domain.member.vo.OauthProvider;
-import com.grouping.groupingserver.infrastructure.oauth.google.GoogleOAuthClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +28,8 @@ public class OAuthController {
             String token = oAuthFacade.loginWithGoogle(code);
             return ResponseEntity.ok(Map.of("token", token));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid ID token");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 }

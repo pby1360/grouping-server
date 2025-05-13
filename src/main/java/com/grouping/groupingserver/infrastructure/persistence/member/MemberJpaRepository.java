@@ -18,4 +18,9 @@ public class MemberJpaRepository implements MemberRepository {
     public Optional<Member> findById(UUID id) {
         return jpa.findById(id);
     }
+
+    @Override
+    public void save(Member member) {
+        jpa.save(member);
+    }
 }

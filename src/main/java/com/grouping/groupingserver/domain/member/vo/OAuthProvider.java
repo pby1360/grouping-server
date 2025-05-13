@@ -1,6 +1,6 @@
 package com.grouping.groupingserver.domain.member.vo;
 
-public enum OauthProvider {
+public enum OAuthProvider {
     GOOGLE,
     KAKAO,
     NAVER

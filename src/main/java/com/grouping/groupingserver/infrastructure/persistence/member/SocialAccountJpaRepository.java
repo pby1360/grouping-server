@@ -4,6 +4,7 @@ import com.grouping.groupingserver.domain.member.MemberRepository;
 import com.grouping.groupingserver.domain.member.SocialAccountRepository;
 import com.grouping.groupingserver.domain.member.entity.Member;
 import com.grouping.groupingserver.domain.member.entity.SocialAccount;
+import com.grouping.groupingserver.domain.member.vo.OAuthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,12 @@ public class SocialAccountJpaRepository implements SocialAccountRepository {
     private final SpringDataSocialAccountJpa jpa;
 
     @Override
-    public Optional<SocialAccount> findByProviderAndProviderUserId(String provider, String providerUserId) {
+    public Optional<SocialAccount> findByProviderAndProviderUserId(OAuthProvider provider, String providerUserId) {
         return jpa.findByProviderAndProviderUserId(provider, providerUserId);
+    }
+
+    @Override
+    public void save(SocialAccount socialAccount) {
+        jpa.save(socialAccount);
     }
 }

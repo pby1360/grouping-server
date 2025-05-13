@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface MemberRepository {
     Optional<Member> findById(UUID id);
+    void save(Member member);
 }
