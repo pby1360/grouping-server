@@ -1,5 +1,6 @@
 package com.grouping.groupingserver.api.controller;
 
+import com.grouping.groupingserver.api.dto.response.TokenResponse;
 import com.grouping.groupingserver.application.member.facade.OAuthFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +23,11 @@ public class OAuthController {
 
 
     @PostMapping("/google")
-    public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> request) {
+    public ResponseEntity<TokenResponse> loginWithGoogle(@RequestBody Map<String, String> request) {
         String code = request.get("code");
         try {
-            String token = oAuthFacade.loginWithGoogle(code);
-            return ResponseEntity.ok(Map.of("token", token));
+            TokenResponse token = oAuthFacade.loginWithGoogle(code);
+            return ResponseEntity.ok(token);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);

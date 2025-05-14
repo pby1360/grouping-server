@@ -1,5 +1,7 @@
 package com.grouping.groupingserver.application.member.facade;
 
+import com.grouping.groupingserver.api.dto.response.TokenResponse;
+import com.grouping.groupingserver.application.Auth.service.RefreshTokenService;
 import com.grouping.groupingserver.application.member.command.CreateMemberCommand;
 import com.grouping.groupingserver.application.member.command.CreateSocialAccountCommand;
 import com.grouping.groupingserver.application.member.dto.MemberDto;
@@ -10,10 +12,12 @@ import com.grouping.groupingserver.domain.member.vo.OAuthProvider;
 import com.grouping.groupingserver.infrastructure.oauth.google.GoogleOAuthClient;
 import com.grouping.groupingserver.infrastructure.oauth.google.GoogleTokenResponse;
 import com.grouping.groupingserver.infrastructure.oauth.google.GoogleUser;
+import com.grouping.groupingserver.infrastructure.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,9 +29,10 @@ public class OAuthFacade {
     private final GoogleOAuthClient googleOAuthClient;
     private final SocialAccountService socialAccountService;
     private final MemberService memberService;
-//    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenService refreshTokenService;
 
-    public String loginWithGoogle(String code) {
+    public TokenResponse loginWithGoogle(String code) {
         GoogleTokenResponse tokenResponse = googleOAuthClient.exchangeCodeForToken(code);
         log.info("GoogleTokenResponse? {}", tokenResponse.toString());
         String token = tokenResponse.accessToken();
@@ -50,7 +55,8 @@ public class OAuthFacade {
         }
 
         // JWT 발급
-//            String token = jwtTokenProvider.generateToken(member.getId(), member.getRole());
-            return member.toString();
+        String accessToken = jwtTokenProvider.generateToken(member.id(), List.of("ROLE_USER"));
+        String refreshToken = refreshTokenService.generateRefreshToken(member.id());
+        return new TokenResponse(accessToken, refreshToken);
     }
 }
